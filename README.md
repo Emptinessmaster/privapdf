@@ -28,19 +28,6 @@
 - [`pdf.js`](https://github.com/mozilla/pdf.js) — rendering delle pagine.
 - Service Worker per la cache offline dell'app e delle librerie.
 
-## 🚀 Uso in locale
-
-Il Service Worker richiede HTTP (non `file://`). Da un terminale nella cartella del progetto:
-
-```bash
-python -m http.server 8080
-```
-
-Poi apri <http://127.0.0.1:8080/>.
-
-## 📦 Deploy
-
-È un sito statico: pubblicabile su **GitHub Pages**, Netlify, Cloudflare Pages o qualsiasi hosting statico. Tutti i percorsi sono relativi (`./`), quindi funziona anche in sottocartella.
 
 ## ☕ Sostieni il progetto
 
