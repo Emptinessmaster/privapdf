@@ -138,6 +138,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .icon-btn { padding: 9px; }
 
+/* Link all'app gemella (ByteLens) */
+.app-switch { border-color: var(--hairline-strong); color: var(--text-muted); }
+.app-switch:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
 /* Spinner nei bottoni */
 .btn-spinner {
   width: 15px; height: 15px; border-radius: 50%;
@@ -188,6 +192,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   .header-actions .btn-donate span:last-child { display: none; }
   .btn-install { padding: 9px 11px; }
   .btn-install span { display: none; }
+  .app-switch .lbl { display: none; }
 }
 
 /* ---------- Hero ---------- */
