@@ -1,0 +1,27 @@
+{
+  "name": "PrivaPDF · Strumenti PDF privati",
+  "short_name": "PrivaPDF",
+  "description": "Unisci, dividi, ruota e oscura i tuoi PDF interamente nel browser. Nessun upload, funziona offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B1220",
+  "theme_color": "#0B1220",
+  "lang": "it",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PrivaPDF · Unisci, dividi e oscura PDF nel browser — 100% privato</title>
+  <meta name="description" content="Unisci, dividi, ruota e oscura (redigi) i tuoi PDF direttamente nel browser. Nessun upload, zero server, zero tracking. Funziona anche offline come PWA." />
+  <meta name="keywords" content="unire pdf, dividere pdf, oscurare pdf, redigere pdf, ruotare pdf, pdf privato, pdf offline, merge pdf, split pdf, redact pdf" />
+  <meta name="author" content="PrivaPDF" />
+  <meta name="theme-color" content="#0B1220" />
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="PrivaPDF · Unisci, dividi e oscura PDF nel browser" />
+  <meta property="og:description" content="Strumenti PDF privati che girano interamente sul tuo dispositivo. Nessun upload." />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:site_name" content="PrivaPDF" />
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Dati strutturati per la SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PrivaPDF",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any (browser)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "description": "Merge, split, rotate and redact PDF files entirely in your browser. No upload, works offline."
+  }
+  </script>
+</head>
+<body>
+  <!-- Anti-flash: applica il tema salvato prima del render -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('privapdf-theme');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="./" aria-label="PrivaPDF home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="30" height="30">
+            <path d="M16 3.5 26 8v8c0 6-4.3 10.4-10 12.5C10.3 26.4 6 22 6 16V8l10-4.5Z"
+                  fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M11.5 16.2l3 3 6-6.4" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">Priva<span class="brand-accent">PDF</span></span>
+      </a>
+
+      <!-- Trust banner nell'header -->
+      <div class="trust-banner" role="status">
+        <span class="trust-shield" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2.5 20 6v6c0 5-3.6 8.3-8 9.8C7.6 20.3 4 17 4 12V6l8-3.5Z" fill="currentColor" opacity="0.16"/><path d="M12 2.5 20 6v6c0 5-3.6 8.3-8 9.8C7.6 20.3 4 17 4 12V6l8-3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 12.2l2.3 2.3 4.5-4.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="trust-text">
+          <strong>🛡️ Zero Server. Zero Tracking.</strong>
+          I tuoi documenti restano al 100% sul tuo dispositivo.
+        </span>
+        <button class="trust-info" id="howBtn" type="button">Come funziona?</button>
+      </div>
+
+      <nav class="header-actions">
+        <button class="btn btn-install" id="installBtn" type="button" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3v10m0 0 4-4m-4 4-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Installa App Offline
+        </button>
+        <a class="btn btn-donate" href="#dona"><span aria-hidden="true">☕</span> Offrimi un caffè</a>
+        <button class="btn btn-ghost icon-btn" id="themeToggle" type="button" aria-label="Cambia tema" title="Tema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22"/><line x1="2" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22" y2="12"/><line x1="4.9" y1="4.9" x2="6.6" y2="6.6"/><line x1="17.4" y1="17.4" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.6" y2="17.4"/><line x1="17.4" y1="6.6" x2="19.1" y2="4.9"/></g></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================ HERO ============================ -->
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Strumenti PDF · 100% nel tuo browser</p>
+        <h1>Unisci, dividi, ruota e <span class="accent-text">oscura</span> i tuoi PDF.<br />Senza mai caricarli online.</h1>
+        <p class="lede">PrivaPDF elabora tutto localmente sul tuo dispositivo con WebAssembly e risorse del browser. I file non lasciano mai il tuo computer — e l'app continua a funzionare anche offline.</p>
+        <ul class="trust-row">
+          <li><span class="dot" aria-hidden="true"></span> Nessun upload verso server</li>
+          <li><span class="dot" aria-hidden="true"></span> Funziona offline (PWA)</li>
+          <li><span class="dot" aria-hidden="true"></span> Gratis, senza registrazione</li>
+        </ul>
+        <p class="offline-note">
+          <span aria-hidden="true">✈️</span> Incrocia le braccia e stacca la connessione Internet: l'app continuerà a funzionare perfettamente.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================ APP ============================ -->
+    <section class="wrap app-shell" aria-label="Strumenti PDF">
+      <!-- Selettore strumento -->
+      <div class="tool-tabs" role="tablist" aria-label="Strumenti">
+        <button class="tool-tab is-active" role="tab" data-tool="merge" aria-selected="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="4" width="9" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="12" y="8" width="9" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+          <span>Unisci</span>
+        </button>
+        <button class="tool-tab" role="tab" data-tool="split" aria-selected="false">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v16" stroke="currentColor" stroke-width="1.8" stroke-dasharray="2.5 2.5"/></svg>
+          <span>Dividi</span>
+        </button>
+        <button class="tool-tab" role="tab" data-tool="redact" aria-selected="false">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="7" y="9" width="10" height="2.6" rx="0.6" fill="currentColor"/><rect x="7" y="14" width="6" height="2.6" rx="0.6" fill="currentColor"/></svg>
+          <span>Oscura</span>
+        </button>
+        <button class="tool-tab" role="tab" data-tool="pages" aria-selected="false">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 8a8 8 0 0 1 13.7-3.5M20 4v4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16a8 8 0 0 1-13.7 3.5M4 20v-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Ruota &amp; Pagine</span>
+        </button>
+      </div>
+
+      <div class="tool-stage panel">
+        <!-- ---------------- MERGE ---------------- -->
+        <section class="tool-view is-active" id="view-merge" role="tabpanel">
+          <div class="tool-head">
+            <div>
+              <h2>Unisci PDF</h2>
+              <p class="tool-sub">Aggiungi più file, riordinali trascinandoli e uniscili in un unico PDF.</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" data-reset="merge" hidden>Svuota</button>
+          </div>
+
+          <div class="dropzone" id="mergeDrop" tabindex="0" role="button" aria-label="Aggiungi file PDF">
+            <input type="file" id="mergeInput" accept="application/pdf" multiple hidden />
+            <div class="dropzone-empty">
+              <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><path d="M12 16V4m0 0 4 4m-4-4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="drop-title">Trascina qui i tuoi PDF</p>
+              <p class="drop-sub">oppure <span class="link-like">scegli i file</span> — puoi aggiungerne quanti vuoi</p>
+            </div>
+          </div>
+
+          <ul class="file-list" id="mergeList" aria-label="File da unire"></ul>
+
+          <div class="actions" id="mergeActions" hidden>
+            <button class="btn btn-outline btn-sm" id="mergeAddMore" type="button">+ Aggiungi altri</button>
+            <button class="btn btn-primary" id="mergeRun" type="button">
+              <span class="btn-spinner" hidden></span>
+              <span>Unisci &amp; Scarica</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ---------------- SPLIT ---------------- -->
+        <section class="tool-view" id="view-split" role="tabpanel" hidden>
+          <div class="tool-head">
+            <div>
+              <h2>Dividi PDF</h2>
+              <p class="tool-sub">Scegli le pagine cliccando le anteprime o scrivendo gli intervalli, poi estraile in un nuovo PDF.</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" data-reset="split" hidden>Cambia file</button>
+          </div>
+
+          <div class="dropzone" id="splitDrop" tabindex="0" role="button" aria-label="Carica un PDF">
+            <input type="file" id="splitInput" accept="application/pdf" hidden />
+            <div class="dropzone-empty">
+              <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="drop-title">Trascina qui un PDF</p>
+              <p class="drop-sub">oppure <span class="link-like">scegli un file</span></p>
+            </div>
+          </div>
+
+          <div class="split-workspace" id="splitWorkspace" hidden>
+            <div class="range-bar">
+              <div class="field">
+                <label class="field-label" for="splitRange">Pagine da estrarre</label>
+                <input type="text" id="splitRange" class="text-input" placeholder="es. 1-3, 5, 8-10" />
+                <p class="field-hint">Separa con la virgola. Usa il trattino per gli intervalli. Clicca le anteprime per selezionare.</p>
+              </div>
+              <div class="range-quick">
+                <button class="btn btn-ghost btn-sm" id="splitAll" type="button">Tutte</button>
+                <button class="btn btn-ghost btn-sm" id="splitNone" type="button">Nessuna</button>
+                <button class="btn btn-ghost btn-sm" id="splitOdd" type="button">Dispari</button>
+                <button class="btn btn-ghost btn-sm" id="splitEven" type="button">Pari</button>
+              </div>
+            </div>
+            <div class="page-grid" id="splitGrid" aria-label="Pagine del documento"></div>
+            <div class="actions">
+              <span class="selection-count" id="splitCount">0 pagine selezionate</span>
+              <button class="btn btn-primary" id="splitRun" type="button">
+                <span class="btn-spinner" hidden></span>
+                <span>Estrai &amp; Scarica</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------------- REDACT ---------------- -->
+        <section class="tool-view" id="view-redact" role="tabpanel" hidden>
+          <div class="tool-head">
+            <div>
+              <h2>Oscura / Redigi</h2>
+              <p class="tool-sub">Traccia rettangoli neri sulle informazioni sensibili. Le aree oscurate vengono rasterizzate: il testo sottostante viene rimosso in modo permanente.</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" data-reset="redact" hidden>Cambia file</button>
+          </div>
+
+          <div class="dropzone" id="redactDrop" tabindex="0" role="button" aria-label="Carica un PDF">
+            <input type="file" id="redactInput" accept="application/pdf" hidden />
+            <div class="dropzone-empty">
+              <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="8" y="9" width="8" height="2.4" rx="0.6" fill="currentColor"/><rect x="8" y="14" width="5" height="2.4" rx="0.6" fill="currentColor"/></svg>
+              <p class="drop-title">Trascina qui un PDF</p>
+              <p class="drop-sub">oppure <span class="link-like">scegli un file</span></p>
+            </div>
+          </div>
+
+          <div class="redact-workspace" id="redactWorkspace" hidden>
+            <div class="redact-toolbar">
+              <div class="pager">
+                <button class="btn btn-ghost btn-sm" id="redactPrev" type="button" aria-label="Pagina precedente">‹</button>
+                <span class="pager-label">Pagina <span id="redactPageNum">1</span> / <span id="redactPageTot">1</span></span>
+                <button class="btn btn-ghost btn-sm" id="redactNext" type="button" aria-label="Pagina successiva">›</button>
+              </div>
+              <div class="redact-tools">
+                <button class="btn btn-ghost btn-sm" id="redactUndo" type="button">↩ Annulla box</button>
+                <button class="btn btn-ghost btn-sm" id="redactClearPage" type="button">Pulisci pagina</button>
+                <span class="redact-hint">✏️ Trascina sul foglio per oscurare</span>
+              </div>
+            </div>
+            <div class="canvas-holder" id="redactCanvasHolder">
+              <canvas id="redactCanvas"></canvas>
+              <div class="redact-overlay" id="redactOverlay"></div>
+            </div>
+            <div class="actions">
+              <span class="selection-count" id="redactCount">0 aree oscurate</span>
+              <button class="btn btn-primary" id="redactRun" type="button">
+                <span class="btn-spinner" hidden></span>
+                <span>Applica &amp; Scarica</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------------- PAGES (rotate/delete) ---------------- -->
+        <section class="tool-view" id="view-pages" role="tabpanel" hidden>
+          <div class="tool-head">
+            <div>
+              <h2>Ruota &amp; Pagine</h2>
+              <p class="tool-sub">Ruota o elimina singole pagine. Le modifiche si applicano quando scarichi.</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" data-reset="pages" hidden>Cambia file</button>
+          </div>
+
+          <div class="dropzone" id="pagesDrop" tabindex="0" role="button" aria-label="Carica un PDF">
+            <input type="file" id="pagesInput" accept="application/pdf" hidden />
+            <div class="dropzone-empty">
+              <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="drop-title">Trascina qui un PDF</p>
+              <p class="drop-sub">oppure <span class="link-like">scegli un file</span></p>
+            </div>
+          </div>
+
+          <div class="pages-workspace" id="pagesWorkspace" hidden>
+            <div class="range-bar">
+              <button class="btn btn-ghost btn-sm" id="pagesRotateAllL" type="button">↺ Ruota tutte</button>
+              <button class="btn btn-ghost btn-sm" id="pagesRotateAllR" type="button">↻ Ruota tutte</button>
+              <span class="selection-count" id="pagesCount"></span>
+            </div>
+            <div class="page-grid" id="pagesGrid" aria-label="Pagine del documento"></div>
+            <div class="actions">
+              <button class="btn btn-primary" id="pagesRun" type="button">
+                <span class="btn-spinner" hidden></span>
+                <span>Applica &amp; Scarica</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Fallback caricamento librerie -->
+        <p class="lib-status" id="libStatus" hidden></p>
+      </div>
+
+      <aside class="ad-slot ad-leaderboard" aria-label="Advertisement">
+        <span class="ad-tag">Pubblicità</span>
+        <div class="ad-placeholder">Spazio annuncio 728×90 · sostituisci con il tuo codice</div>
+      </aside>
+    </section>
+
+    <!-- ============================ COME FUNZIONA ============================ -->
+    <section class="wrap how" aria-label="Come funziona">
+      <h2 class="section-title">Come funziona</h2>
+      <div class="how-grid">
+        <article class="how-card">
+          <span class="how-num">01</span>
+          <h3>Carica</h3>
+          <p>Trascina i PDF o selezionali. Restano sul tuo dispositivo: nessun upload verso un server.</p>
+        </article>
+        <article class="how-card">
+          <span class="how-num">02</span>
+          <h3>Elabora</h3>
+          <p>Unisci, dividi, ruota o oscura. Tutto avviene in memoria, nel motore del tuo browser.</p>
+        </article>
+        <article class="how-card">
+          <span class="how-num">03</span>
+          <h3>Scarica</h3>
+          <p>Salva il PDF elaborato. Anche offline: installa PrivaPDF come app e usala senza rete.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================ FAQ ============================ -->
+    <section class="wrap seo" aria-label="Domande frequenti">
+      <div class="faq">
+        <h2>Domande frequenti</h2>
+        <details class="faq-item" open>
+          <summary>I miei PDF vengono caricati su un server?</summary>
+          <p>No. PrivaPDF elabora tutto localmente nel tuo browser tramite WebAssembly e le API del browser (pdf-lib e pdf.js). I file non lasciano mai il tuo dispositivo.</p>
+        </details>
+        <details class="faq-item">
+          <summary>L'oscuramento è davvero permanente?</summary>
+          <p>Sì. Le pagine con aree oscurate vengono rasterizzate ad alta risoluzione con i rettangoli neri già "fusi" nell'immagine: il testo sottostante non è più presente nel file scaricato e non può essere selezionato o recuperato.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Funziona senza connessione?</summary>
+          <p>Sì. Dopo la prima visita puoi installare PrivaPDF come app (PWA). Il Service Worker mette in cache l'app e le librerie, così continua a funzionare completamente offline.</p>
+        </details>
+        <details class="faq-item">
+          <summary>È gratis?</summary>
+          <p>Completamente gratis e senza registrazione. Se ti è utile, puoi sostenere lo sviluppo con una donazione volontaria.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============================ DONAZIONI ============================ -->
+    <section class="wrap donate" id="dona" aria-label="Sostieni il progetto">
+      <div class="donate-card">
+        <div class="donate-copy">
+          <h2>Ti è stato utile?</h2>
+          <p>PrivaPDF è gratis, privato e senza limiti. Se ti fa risparmiare tempo proteggendo i tuoi dati, un piccolo contributo aiuta a tenerlo online.</p>
+        </div>
+        <div class="donate-buttons">
+          <a class="btn btn-primary" href="https://buymeacoffee.com/emptinessmaster" target="_blank" rel="noopener">☕ Buy me a coffee</a>
+          <a class="btn btn-outline" href="https://paypal.me/EmptinessMaster" target="_blank" rel="noopener">🅿️ PayPal</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <span class="brand-name">Priva<span class="brand-accent">PDF</span></span>
+        <p class="footer-tag">Strumenti PDF privati, direttamente nel tuo browser.</p>
+      </div>
+      <nav class="footer-links" aria-label="Link">
+        <a href="../index.html">ByteLens (immagini)</a>
+        <a href="#dona">Sostieni</a>
+        <a href="https://github.com/Emptinessmaster" target="_blank" rel="noopener">Codice sorgente</a>
+      </nav>
+    </div>
+    <div class="wrap footer-legal">
+      <p>© <span id="year">2026</span> PrivaPDF · I documenti vengono elaborati localmente e non lasciano mai il tuo browser.</p>
+    </div>
+  </footer>
+
+  <!-- ============================ MODALE "COME FUNZIONA" ============================ -->
+  <div class="modal-backdrop" id="howModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="howTitle">
+      <button class="modal-close" data-close-modal aria-label="Chiudi">✕</button>
+      <div class="modal-shield" aria-hidden="true">🛡️</div>
+      <h3 id="howTitle">Come funziona la privacy di PrivaPDF</h3>
+      <p>Quando apri un PDF, il file viene letto <strong>solo nella memoria del tuo browser</strong>. L'elaborazione (unione, divisione, rotazione, oscuramento) avviene tramite <strong>WebAssembly</strong> e le API native del browser, direttamente sul tuo dispositivo.</p>
+      <ul class="modal-list">
+        <li><span aria-hidden="true">🚫</span> Nessun file viene mai inviato a un server.</li>
+        <li><span aria-hidden="true">📡</span> Nessun tracciamento dei tuoi documenti.</li>
+        <li><span aria-hidden="true">✈️</span> Funziona anche offline, come una vera app.</li>
+      </ul>
+      <button class="btn btn-primary btn-block" data-close-modal>Ho capito</button>
+    </div>
+  </div>
+
+  <!-- ============================ MODALE DONAZIONE POST-DOWNLOAD ============================ -->
+  <div class="modal-backdrop" id="donateModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="donateTitle">
+      <button class="modal-close" data-close-modal aria-label="Chiudi">✕</button>
+      <div class="modal-emoji" aria-hidden="true">🎉</div>
+      <h3 id="donateTitle">Documento elaborato in totale sicurezza!</h3>
+      <p>Il tuo documento è stato elaborato in totale sicurezza e riservatezza <strong>sul tuo computer</strong>. Se questo strumento ti è stato utile e ti ha fatto risparmiare tempo senza rischiare la tua privacy, considera di offrirmi un caffè per sostenere lo sviluppo di strumenti liberi e privati.</p>
+      <div class="modal-donate-buttons">
+        <a class="btn btn-primary" href="https://buymeacoffee.com/emptinessmaster" target="_blank" rel="noopener">☕ Offrimi un caffè</a>
+        <a class="btn btn-outline" href="https://paypal.me/EmptinessMaster" target="_blank" rel="noopener">🅿️ Donazione PayPal</a>
+      </div>
+      <button class="btn btn-ghost btn-block" data-close-modal>Chiudi · magari la prossima volta</button>
+    </div>
+  </div>
+
+  <!-- Toast notifiche -->
+  <div class="toast" id="toast" hidden></div>
+
+  <!-- Librerie PDF (cache-ate dal Service Worker per l'uso offline) -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
