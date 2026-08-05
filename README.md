@@ -4,6 +4,13 @@
 
 > I documenti vengono elaborati localmente con WebAssembly e le API del browser. I file non lasciano mai il tuo dispositivo.
 
+### [▶ Apri PrivaPDF](https://emptinessmaster.github.io/privapdf/)
+
+[![Apri l'applicazione](https://img.shields.io/badge/▶%20Apri%20l'applicazione-PrivaPDF-10B981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://emptinessmaster.github.io/privapdf/)
+
+[![Deploy](https://github.com/Emptinessmaster/privapdf/actions/workflows/deploy.yml/badge.svg)](https://github.com/Emptinessmaster/privapdf/actions/workflows/deploy.yml)
+![Stack](https://img.shields.io/badge/stack-HTML%20%2B%20CSS%20%2B%20JS-10B981) ![PWA](https://img.shields.io/badge/PWA-offline-38BDF8) ![License](https://img.shields.io/badge/license-MIT-blue)
+
 ---
 
 ## ✨ Funzionalità
