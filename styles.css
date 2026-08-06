@@ -389,11 +389,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 .redact-rect {
   position: absolute; background: #000;
   outline: 2px solid var(--accent); outline-offset: -1px;
+  /* I box confermati NON devono intercettare il puntatore, altrimenti
+     impediscono di disegnare nuovi box sopra o vicino a quelli esistenti. */
+  pointer-events: none;
 }
 .redact-rect .rect-del {
-  position: absolute; top: -10px; right: -10px; width: 20px; height: 20px;
+  position: absolute; top: -11px; right: -11px; width: 22px; height: 22px; z-index: 4;
   border-radius: 50%; background: var(--danger); color: #fff; border: 2px solid var(--surface);
-  cursor: pointer; font-size: 11px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 12px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  /* Solo il pulsante elimina resta cliccabile. */
+  pointer-events: auto;
 }
 
 .lib-status { margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: var(--danger-soft); color: var(--danger); font-size: 13.5px; text-align: center; }

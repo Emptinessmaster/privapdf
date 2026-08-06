@@ -4,7 +4,7 @@
    Strategia: cache-first per l'app shell e le librerie PDF (CDN),
    con fallback di rete per tutto il resto.
    ========================================================================= */
-var CACHE = 'privapdf-v3';
+var CACHE = 'privapdf-v4';
 
 var APP_SHELL = [
   './',

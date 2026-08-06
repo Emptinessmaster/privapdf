@@ -534,12 +534,17 @@
       return { x: Math.max(0, Math.min(1, x)), y: Math.max(0, Math.min(1, y)) };
     }
     overlay.addEventListener('pointerdown', function (e) {
-      if (e.target.classList.contains('rect-del')) return;
+      if (e.button && e.button !== 0) return;            // solo tasto primario
+      if (e.target.classList.contains('rect-del')) return; // clic sul pulsante elimina
+      e.preventDefault();
       drawing = true;
-      overlay.setPointerCapture(e.pointerId);
+      try { overlay.setPointerCapture(e.pointerId); } catch (err) {}
       var p = relPos(e); startX = p.x; startY = p.y;
       ghost = document.createElement('div');
       ghost.className = 'redact-rect';
+      ghost.style.left = (startX * 100) + '%';
+      ghost.style.top = (startY * 100) + '%';
+      ghost.style.width = '0'; ghost.style.height = '0';
       overlay.appendChild(ghost);
     });
     overlay.addEventListener('pointermove', function (e) {
