@@ -770,8 +770,28 @@
    *  PWA — Service Worker + prompt di installazione
    * ================================================================== */
   if ('serviceWorker' in navigator) {
+    // Ricarica UNA volta quando un SW aggiornato prende il controllo, così la
+    // versione installata (PWA) non resta mai "congelata" su una copia vecchia.
+    // Non ricarica al primissimo install (quando non c'era ancora un controller).
+    var hadController = !!navigator.serviceWorker.controller;
+    var refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (refreshing) return;
+      refreshing = true;
+      if (hadController) window.location.reload();
+    });
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function (err) {
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+        reg.update();
+        var promote = function (sw) { if (sw) sw.postMessage('SKIP_WAITING'); };
+        if (reg.waiting) promote(reg.waiting);
+        reg.addEventListener('updatefound', function () {
+          var nw = reg.installing;
+          if (nw) nw.addEventListener('statechange', function () {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) promote(nw);
+          });
+        });
+      }).catch(function (err) {
         console.warn('SW registration failed:', err);
       });
     });

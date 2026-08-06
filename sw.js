@@ -1,10 +1,15 @@
 /* =========================================================================
    PrivaPDF — Service Worker
    Rende l'app installabile e completamente funzionante OFFLINE.
-   Strategia: cache-first per l'app shell e le librerie PDF (CDN),
-   con fallback di rete per tutto il resto.
+
+   Strategia:
+   - App shell same-origin (HTML/CSS/JS/manifest/icone) e navigazioni:
+     NETWORK-FIRST. Online prende sempre l'ultima versione (l'app non resta
+     "congelata" su una copia vecchia in cache); offline usa la cache.
+   - Librerie CDN (pdf-lib, pdf.js) con URL versionati e immutabili:
+     CACHE-FIRST (veloci e sufficienti per l'uso offline).
    ========================================================================= */
-var CACHE = 'privapdf-v4';
+var CACHE = 'privapdf-v5';
 
 var APP_SHELL = [
   './',
@@ -23,9 +28,8 @@ var APP_SHELL = [
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
-      // Cache-iamo ogni risorsa singolarmente per resilienza. Usiamo fetch+put
-      // (non cache.add) perché cache.add rifiuta le risposte opache: i CDN
-      // (jsdelivr) inviano header CORS, quindi un fetch normale restituisce 200.
+      // fetch+put (non cache.add) perché cache.add rifiuta le risposte opache:
+      // i CDN (jsdelivr) inviano header CORS, quindi un fetch normale dà 200.
       return Promise.all(APP_SHELL.map(function (url) {
         return fetch(url, { cache: 'reload' }).then(function (res) {
           if (res && (res.ok || res.type === 'opaque')) return cache.put(url, res);
@@ -45,22 +49,43 @@ self.addEventListener('activate', function (event) {
   );
 });
 
+// Permette alla pagina di forzare l'attivazione immediata del nuovo SW.
+self.addEventListener('message', function (event) {
+  if (event.data === 'SKIP_WAITING') self.skipWaiting();
+});
+
+function putInCache(req, res) {
+  var copy = res.clone();
+  caches.open(CACHE).then(function (cache) { cache.put(req, copy); }).catch(function () {});
+  return res;
+}
+
 self.addEventListener('fetch', function (event) {
   var req = event.request;
   if (req.method !== 'GET') return;
 
+  var url = new URL(req.url);
+  var sameOrigin = url.origin === self.location.origin;
+  var isNav = req.mode === 'navigate';
+
+  if (sameOrigin || isNav) {
+    // NETWORK-FIRST: prova la rete (aggiorna la cache), altrimenti la cache.
+    event.respondWith(
+      fetch(req).then(function (res) {
+        return putInCache(req, res);
+      }).catch(function () {
+        return caches.match(req).then(function (cached) {
+          return cached || (isNav ? caches.match('./index.html') : Response.error());
+        });
+      })
+    );
+    return;
+  }
+
+  // CROSS-ORIGIN (CDN immutabili): CACHE-FIRST con fallback di rete.
   event.respondWith(
     caches.match(req).then(function (cached) {
-      if (cached) return cached;
-      return fetch(req).then(function (res) {
-        // Metti in cache le nuove GET riuscite (incluse le librerie CDN).
-        var copy = res.clone();
-        caches.open(CACHE).then(function (cache) { cache.put(req, copy); }).catch(function () {});
-        return res;
-      }).catch(function () {
-        // Offline e non in cache: per le navigazioni, mostra l'app shell.
-        if (req.mode === 'navigate') return caches.match('./index.html');
-      });
+      return cached || fetch(req).then(function (res) { return putInCache(req, res); });
     })
   );
 });
