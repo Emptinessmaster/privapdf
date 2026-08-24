@@ -403,14 +403,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .lib-status { margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: var(--danger-soft); color: var(--danger); font-size: 13.5px; text-align: center; }
 
-/* ---------- Ad slot ---------- */
-.ad-slot { margin: 18px auto 0; text-align: center; }
-.ad-tag { display: block; font: 500 10px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
-.ad-placeholder {
-  border: 1px dashed var(--hairline-strong); border-radius: 12px; padding: 20px;
-  color: var(--text-faint); font-size: 13px; background: var(--surface);
-}
-
 /* ---------- Come funziona ---------- */
 .how { padding: 54px 0 20px; }
 .section-title { text-align: center; font-size: 26px; margin-bottom: 26px; }
